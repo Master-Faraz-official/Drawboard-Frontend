@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
 import axios from "axios"
+import { toast } from "sonner"
+
 
 import {
     Form,
@@ -17,6 +19,7 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
+import { useRouter } from "next/navigation"
 
 
 
@@ -29,6 +32,7 @@ const formSchema = z.object({
 const page = () => {
     const [responseMessage, setResponseMessage] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const router = useRouter()
 
 
     // 1. Define your form.
@@ -49,7 +53,13 @@ const page = () => {
         try {
             const response = await axios.post("http://localhost:8000/api/users/login", data);
             // setResponseMessage("User  successfully!");
-            
+            toast.success("Logged in Successfully")
+
+
+            setTimeout(() => {
+                router.replace("/drawboard")
+            }, 800); // 1 second delay
+
         } catch (error: any) {
             setResponseMessage(error.response?.data?.message || "Something went wrong");
         }
