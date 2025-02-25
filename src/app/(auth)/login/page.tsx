@@ -30,7 +30,6 @@ const formSchema = z.object({
 
 
 const page = () => {
-    const [responseMessage, setResponseMessage] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const router = useRouter()
 
@@ -48,77 +47,84 @@ const page = () => {
 
     const onSubmit = async (data: z.infer<typeof formSchema>) => {
         setLoading(true);
-        setResponseMessage(null);
-
         try {
-            const response = await axios.post("http://localhost:8000/api/users/login", data);
-            // setResponseMessage("User  successfully!");
-            toast.success("Logged in Successfully")
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/users/login`, data);
 
+            if (!response || response.status !== 200) {
+                throw new Error("Internal Server Error");
+            }
 
-            setTimeout(() => {
-                router.replace("/drawboard")
-            }, 800); // 1 second delay
+            toast.success("Logged in Successfully");
 
-        } catch (error: any) {
-            setResponseMessage(error.response?.data?.message || "Something went wrong");
+            // setTimeout(() => {
+            //     router.replace("/drawboard");
+            // }, 800); // 800ms delay
+
         }
+        catch (error: any) {
+            console.log(error);
 
-        setLoading(false);
+            const message = error.response?.data?.message || error.message || "An unexpected error occurred";
+            toast.error(`Login Failed: ${message}`);
+        }
+        finally {
+            setLoading(false);
+        }
     };
+
 
 
 
     return (
         <main>
-            <div>
+            <div className="flex items-center justify-center h-screen ">
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
 
-                        <FormField
-                            control={form.control}
-                            name="email"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Email</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="abc@gmail.com" {...field} />
-                                    </FormControl>
-                                    <FormDescription>
-                                        This is your public display name.
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                        <section>
+                            <FormField
+                                control={form.control}
+                                name="email"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Email</FormLabel>
+                                        <FormControl>
+                                            <Input type="email" placeholder="abc@gmail.com" {...field} />
+                                        </FormControl>
+                                        <FormDescription>
+                                            This is your public display name.
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="password"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Password</FormLabel>
+                                        <FormControl>
+                                            <Input type="password" placeholder="Password" {...field} />
+                                        </FormControl>
+                                        <FormDescription>
+                                            This is your Password
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                        </section>
+
+                        <section>
+                            <Button type="submit" disabled={loading} className="cursor-not-allowed">
+                                {loading ? "Submitting..." : "Submit"}
+                            </Button>
+                        </section>
 
 
-
-                        <FormField
-                            control={form.control}
-                            name="password"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Password</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Password" {...field} />
-                                    </FormControl>
-                                    <FormDescription>
-                                        This is your Password
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-
-                        <Button type="submit" disabled={loading}>
-                            {loading ? "Submitting..." : "Submit"}
-                        </Button>
-
-                        {responseMessage && (
-                            <p className="text-center text-sm text-gray-500 mt-2">{responseMessage}</p>
-                        )}
 
                     </form>
                 </Form>
