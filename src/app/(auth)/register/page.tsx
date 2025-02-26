@@ -17,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
 import axios from "axios"
+import { useRouter } from "next/navigation"
 
 
 const formSchema = z.object({
@@ -28,10 +29,9 @@ const formSchema = z.object({
 
 
 
-const LoginForm = () => {
+const RegisterForm = () => {
 
 
-    const [responseMessage, setResponseMessage] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
 
@@ -49,13 +49,13 @@ const LoginForm = () => {
 
     const onSubmit = async (data: z.infer<typeof formSchema>) => {
         setLoading(true);
-        setResponseMessage(null);
+        // setResponseMessage(null);
 
         try {
             const response = await axios.post("http://localhost:8000/api/users/register", data);
-            setResponseMessage("User registered successfully!");
+            // setResponseMessage("User registered successfully!");
         } catch (error: any) {
-            setResponseMessage(error.response?.data?.message || "Something went wrong");
+            // setResponseMessage(error.response?.data?.message || "Something went wrong");
         }
 
         setLoading(false);
@@ -125,10 +125,6 @@ const LoginForm = () => {
                         {loading ? "Submitting..." : "Submit"}
                     </Button>
 
-                    {responseMessage && (
-                        <p className="text-center text-sm text-gray-500 mt-2">{responseMessage}</p>
-                    )}
-
                 </form>
             </Form>
 
@@ -138,4 +134,4 @@ const LoginForm = () => {
     )
 }
 
-export default LoginForm
+export default RegisterForm
