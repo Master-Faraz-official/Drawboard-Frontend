@@ -51,7 +51,11 @@ const LoginPage = () => {
         try {
             const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/users/login`, data);
 
-            if (response.status !== 200) throw new Error("Internal Server Error");
+            // if (response.status !== 200) throw new Error("Internal Server Error");
+            if (response.status !== 200) {
+                toast.error("Internal Server Error");
+
+            }
 
             toast.success("Logged in successfully");
 

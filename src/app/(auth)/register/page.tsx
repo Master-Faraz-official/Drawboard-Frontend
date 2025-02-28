@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button"
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -18,6 +17,8 @@ import { Input } from "@/components/ui/input"
 import { useState } from "react"
 import axios from "axios"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
+
 
 
 const formSchema = z.object({
@@ -33,9 +34,9 @@ const RegisterForm = () => {
 
 
     const [loading, setLoading] = useState(false);
+    const router = useRouter();
 
 
-    // 1. Define your form.
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -49,16 +50,30 @@ const RegisterForm = () => {
 
     const onSubmit = async (data: z.infer<typeof formSchema>) => {
         setLoading(true);
-        // setResponseMessage(null);
 
         try {
-            const response = await axios.post("http://localhost:8000/api/users/register", data);
-            // setResponseMessage("User registered successfully!");
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/users/register`, data);
+            if (response.status >= 200 && response.status < 300) {
+                toast.error("Internal Server Error");
+            }
+
+            toast.success("User Registered Successfully");
+
+            await new Promise(resolve => setTimeout(resolve, 800)); // Delay before navigation
+            router.replace("/login");
         } catch (error: any) {
-            // setResponseMessage(error.response?.data?.message || "Something went wrong");
+            if (error.response) {
+                toast.error(`User Registration Failed: ${error.response.data?.message || "Server responded with an error"}`);
+            } else if (error.request) {
+                toast.error("User Registration Failed: No response from the server. Please try again.");
+            } else {
+                toast.error(`User Registration Failed: ${error.message || "An unexpected error occurred"}`);
+            }
+        }
+        finally {
+            setLoading(false);
         }
 
-        setLoading(false);
     };
 
 
@@ -72,13 +87,11 @@ const RegisterForm = () => {
                         name="username"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>username</FormLabel>
+                                <FormLabel>Username</FormLabel>
                                 <FormControl>
                                     <Input placeholder="jhon" {...field} />
                                 </FormControl>
-                                <FormDescription>
-                                    This is your public display name.
-                                </FormDescription>
+
                                 <FormMessage />
                             </FormItem>
                         )}
@@ -91,11 +104,9 @@ const RegisterForm = () => {
                             <FormItem>
                                 <FormLabel>Email</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="abc@gmail.com" {...field} />
+                                    <Input placeholder="abc@gmail.com" type="email" {...field} />
                                 </FormControl>
-                                <FormDescription>
-                                    This is your public display name.
-                                </FormDescription>
+
                                 <FormMessage />
                             </FormItem>
                         )}
@@ -110,20 +121,20 @@ const RegisterForm = () => {
                             <FormItem>
                                 <FormLabel>Password</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Password" {...field} />
+                                    <Input placeholder="Password" type="password" {...field} />
                                 </FormControl>
-                                <FormDescription>
-                                    This is your Password
-                                </FormDescription>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
 
 
-                    <Button type="submit" disabled={loading}>
+                    {/* <Button type="submit" disabled={loading}>
                         {loading ? "Submitting..." : "Submit"}
-                    </Button>
+                    </Button> */}
+                    
+                    <Button type="submit" disabled={loading} className={loading ? "opacity-50 cursor-not-allowed" : ""}> {loading ? "Submitting..." : "Submit"}</Button>
+
 
                 </form>
             </Form>
