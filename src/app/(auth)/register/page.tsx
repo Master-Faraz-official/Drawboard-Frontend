@@ -127,11 +127,6 @@ const RegisterForm = () => {
                             </FormItem>
                         )}
                     />
-
-
-                    {/* <Button type="submit" disabled={loading}>
-                        {loading ? "Submitting..." : "Submit"}
-                    </Button> */}
                     
                     <Button type="submit" disabled={loading} className={loading ? "opacity-50 cursor-not-allowed" : ""}> {loading ? "Submitting..." : "Submit"}</Button>
 

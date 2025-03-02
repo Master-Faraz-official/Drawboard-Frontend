@@ -49,7 +49,9 @@ const LoginPage = () => {
     const onSubmit = async (data: z.infer<typeof formSchema>) => {
         setLoading(true);
         try {
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/users/login`, data);
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/users/login`, data, { withCredentials: true });
+            
+            console.log(response)
 
             // if (response.status !== 200) throw new Error("Internal Server Error");
             if (response.status !== 200) {
@@ -61,7 +63,7 @@ const LoginPage = () => {
 
             await new Promise(resolve => setTimeout(resolve, 800)); // Delay before navigation
             router.replace("/drawboard");
-            
+
         } catch (error: any) {
             handleLoginError(error);
         } finally {
