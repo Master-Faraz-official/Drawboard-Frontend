@@ -18,11 +18,13 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { useRouter } from "next/navigation"
+import CustomFormField, { FormFieldType } from "@/components/CustomFormField"
 
 const formSchema = z.object({
     email: z.string().email("Please enter a valid email."),
     password: z.string().min(6, { message: "Password must be at least 6 characters long." })
 })
+
 
 const LoginPage = () => {
     const [loading, setLoading] = useState(false);
@@ -50,7 +52,7 @@ const LoginPage = () => {
         setLoading(true);
         try {
             const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/users/login`, data, { withCredentials: true });
-            
+
             console.log(response)
 
             // if (response.status !== 200) throw new Error("Internal Server Error");
@@ -75,32 +77,29 @@ const LoginPage = () => {
         <main className="flex items-center justify-center h-screen">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 w-full max-w-md">
-                    <FormField
+
+                    <CustomFormField
+                        fieldType={FormFieldType.INPUT}
                         control={form.control}
                         name="email"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Email</FormLabel>
-                                <FormControl>
-                                    <Input type="email" placeholder="abc@gmail.com" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
+                        label="Email"
+                        placeholder="john@gmail.com"
+                        iconSrc="/images/icons/email.svg"
+                        iconAlt="email"
                     />
-                    <FormField
+
+                    <CustomFormField
+                        fieldType={FormFieldType.INPUT}
                         control={form.control}
                         name="password"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Password</FormLabel>
-                                <FormControl>
-                                    <Input type="password" placeholder="Enter your password" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
+                        label="Password"
+                        placeholder=""
+                        iconSrc="/images/icons/password.svg"
+                        iconAlt="Password"
                     />
+
+
+
                     <Button type="submit" disabled={loading} className="w-full" >
                         {loading ? "Submitting..." : "Submit"}
                     </Button>

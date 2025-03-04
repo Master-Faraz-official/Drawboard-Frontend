@@ -5,6 +5,9 @@ import { toast } from "sonner"
 import { Button } from "./ui/button"
 import { useRouter } from "next/navigation"
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+
+
 const navItems = [
     { name: "Home", link: "/" },
     { name: "Register", link: "/register" },
@@ -12,20 +15,30 @@ const navItems = [
     { name: "Try now", link: "/drawboard" },
 ]
 
+interface NavbarProps {
+    className: string
+}
 
-const Navbar = () => {
+
+const Navbar = ({ className }: NavbarProps) => {
     const router = useRouter()
     return (
-        <header className="bg-emerald-500 p-2 flex items-center justify-center space-x-16">
-            <nav className="flex space-x-16">
+        <header className={`shadow-xl bg-emerald-300  p-2 flex items-center flex-col justify-between space-y-16 ${className}`}>
+
+            <Avatar className="w-16 h-16">
+                <AvatarImage className="w-full h-full" src="https://github.com/shadcn.png" />
+                <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+
+
+            {/* <nav className="flex space-x-16">
                 {navItems.map((obj) => (
                     <div key={obj.name}>
                         <Button variant="ghost" onClick={() => { router.push(obj.link) }}>{obj.name}</Button>
-                        {/* <Link href={obj.link}>{obj.name}</Link> */}
                     </div>
                 ))}
-            </nav>
-            
+            </nav> */}
+
             <Button variant="ghost" onClick={async () => {
                 try {
                     const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/users/logout`, {}, { withCredentials: true });

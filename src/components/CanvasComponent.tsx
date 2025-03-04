@@ -1,175 +1,84 @@
-'use client'
+import { useRef, useState, type ChangeEvent, forwardRef, useImperativeHandle } from "react";
+import { ReactSketchCanvas, type ReactSketchCanvasRef } from "react-sketch-canvas";
+import { Button } from "@/components/ui/button";
+import { Eraser, Pen, Redo, RotateCcw, Undo } from "lucide-react";
 
-// Import necessary hooks and types from React
-import { useRef, useState, type ChangeEvent } from 'react'
+// Forward ref to allow parent to access canvasRef
+const CanvasComponent = forwardRef((_, ref) => {
+  const colorInputRef = useRef<HTMLInputElement>(null);
+  const canvasRef = useRef<ReactSketchCanvasRef>(null);
+  const [strokeColor, setStrokeColor] = useState("#a855f7");
+  const [eraseMode, setEraseMode] = useState(false);
 
-// Import ReactSketchCanvas and its type
-import {
-  ReactSketchCanvas,
-  type ReactSketchCanvasRef
-} from 'react-sketch-canvas'
-
-// Import Button component from ShadCN and icons from lucide-react
-import { Button } from '@/components/ui/button'
-import { Eraser, Pen, Play, Redo, RotateCcw, Save, Undo } from 'lucide-react'
-
-
-// Define the Canvas component
-export default function Canvas() {
-
-  // Create references for color input and canvas
-  const colorInputRef = useRef<HTMLInputElement>(null)
-  const canvasRef = useRef<ReactSketchCanvasRef>(null)
-
-  // State to manage stroke color and erase mode
-  const [strokeColor, setStrokeColor] = useState('#a855f7')
-  const [eraseMode, setEraseMode] = useState(false)
-
-  // Handle stroke color change
   function handleStrokeColorChange(event: ChangeEvent<HTMLInputElement>) {
-    setStrokeColor(event.target.value)
-    console.log(strokeColor)
+    setStrokeColor(event.target.value);
   }
 
-  // Enable eraser mode
   function handleEraserClick() {
-    setEraseMode(true)
-    canvasRef.current?.eraseMode(true)
+    setEraseMode(true);
+    canvasRef.current?.eraseMode(true);
   }
 
-  // Enable pen mode
   function handlePenClick() {
-    setEraseMode(false)
-    canvasRef.current?.eraseMode(false)
+    setEraseMode(false);
+    canvasRef.current?.eraseMode(false);
   }
 
-  // Undo the last action
   function handleUndoClick() {
-    canvasRef.current?.undo()
+    canvasRef.current?.undo();
   }
 
-  // Redo the last undone action
   function handleRedoClick() {
-    canvasRef.current?.redo()
+    canvasRef.current?.redo();
   }
 
-  // Clear the canvas
   function handleClearClick() {
-    canvasRef.current?.clearCanvas()
+    canvasRef.current?.clearCanvas();
   }
 
-  // Save the canvas drawing as an image
-  async function handleSave() {
-    const dataURL = await canvasRef.current?.exportImage('png')
-    console.log(dataURL)
-    
-    // if (dataURL) {
-    //   const link = Object.assign(document.createElement('a'), {
-    //     href: dataURL,
-    //     style: { display: 'none' },
-    //     download: 'sketch.png'
-    //   })
+  // Expose canvas functions to parent using ref
+  useImperativeHandle(ref, () => ({
+    async getImage() {
+      return await canvasRef.current?.exportImage("png");
+    },
+  }));
 
-    //   document.body.appendChild(link)
-    //   link.click()
-    //   link.remove()
-    // }
-
-  }
-
-  // Render the component
   return (
-    <div className={`flex h-[80vh] gap-4 p-5`}>
-
-      {/* Canvas */}
+    <div className="flex h-[70vh] gap-4 p-5">
       <ReactSketchCanvas
-        width='100%'
-        // height='430px'
+        width="100%"
         ref={canvasRef}
         strokeColor={strokeColor}
-        canvasColor='transparent'
-        className='!rounded-2xl shadow-lg !border-slate-300'
+        canvasColor="transparent"
+        className="!rounded-2xl shadow-lg !border-slate-300"
       />
-
-      {/* Toolbar */}
-      <div className='flex flex-col items-center gap-y-6 divide-y divide-purple-200 py-4 dark:divide-purple-900'>
-        {/* Color picker */}
-        <Button
-          size='icon'
-          type='button'
-          onClick={() => colorInputRef.current?.click()}
-          style={{ backgroundColor: strokeColor }}
-        >
-          <input
-            type='color'
-            ref={colorInputRef}
-            className='sr-only'
-            value={strokeColor}
-            onChange={handleStrokeColorChange}
-          />
+      <div className="flex flex-col items-center gap-y-6 divide-y divide-purple-200 py-4 dark:divide-purple-900">
+        <Button size="icon" type="button" onClick={() => colorInputRef.current?.click()} style={{ backgroundColor: strokeColor }}>
+          <input type="color" ref={colorInputRef} className="sr-only" value={strokeColor} onChange={handleStrokeColorChange} />
         </Button>
-
-        {/* Drawing mode */}
-        <div className='flex flex-col gap-3 pt-6'>
-          <Button
-            size='icon'
-            type='button'
-            variant='outline'
-            disabled={!eraseMode}
-            onClick={handlePenClick}
-          >
+        <div className="flex flex-col gap-3 pt-6">
+          <Button size="icon" type="button" variant="outline" disabled={!eraseMode} onClick={handlePenClick}>
             <Pen size={16} />
           </Button>
-          <Button
-            size='icon'
-            type='button'
-            variant='outline'
-            disabled={eraseMode}
-            onClick={handleEraserClick}
-          >
+          <Button size="icon" type="button" variant="outline" disabled={eraseMode} onClick={handleEraserClick}>
             <Eraser size={16} />
           </Button>
         </div>
-
-        {/* Actions */}
-        <div className='flex flex-col gap-3 pt-6'>
-          <Button
-            size='icon'
-            type='button'
-            variant='outline'
-            onClick={handleUndoClick}
-          >
+        <div className="flex flex-col gap-3 pt-6">
+          <Button size="icon" type="button" variant="outline" onClick={handleUndoClick}>
             <Undo size={16} />
           </Button>
-          <Button
-            size='icon'
-            type='button'
-            variant='outline'
-            onClick={handleRedoClick}
-          >
+          <Button size="icon" type="button" variant="outline" onClick={handleRedoClick}>
             <Redo size={16} />
           </Button>
-          <Button
-            size='icon'
-            type='button'
-            variant='outline'
-            onClick={handleClearClick}
-          >
+          <Button size="icon" type="button" variant="outline" onClick={handleClearClick}>
             <RotateCcw size={16} />
-          </Button>
-
-          <Button
-            size='icon'
-            type='button'
-            variant='outline'
-            onClick={handleSave}
-            className='bg-emerald-400'
-          >
-            {/* <Save size={16} /> */}
-            <Play size={16} />
           </Button>
         </div>
       </div>
     </div>
-  )
-}
+  );
+});
+
+CanvasComponent.displayName = "CanvasComponent";
+export default CanvasComponent;

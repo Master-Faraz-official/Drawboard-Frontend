@@ -26,10 +26,12 @@ export default function RootLayout({
   return (
     <html lang="en" >
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex `}
       >
-        {/* <Navbar /> */}
-        <main>{children}</main>
+          <Navbar className="w-[10vw]"/>
+        <main className="w-[90vw]">
+          {children}
+        </main>
 
         <Toaster richColors position="top-right" />
 
