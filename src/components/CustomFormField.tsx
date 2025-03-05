@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import Image from "next/image";
+import { Eye, EyeOff } from "lucide-react";
 
 import {
     FormControl,
@@ -11,6 +12,7 @@ import {
 import { Input } from "./ui/input";
 import { Control } from "react-hook-form";
 import { Textarea } from "./ui/textarea";
+import { useState } from "react";
 
 
 export enum FormFieldType {
@@ -34,6 +36,7 @@ interface CustomProps {
 }
 
 const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
+    const [showPassword, setShowPassword] = useState(false);
     switch (props.fieldType) {
 
 
@@ -77,9 +80,18 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
                         <Input
                             placeholder={props.placeholder}
                             {...field}
+                            type={showPassword ? "text" : "password"}
                             className="text-[14px] leading-[18px] font-medium focus-visible:ring-0 focus-visible:ring-offset-0 text-dark-700 border-0"
                         />
                     </FormControl>
+                    <button
+                        type="button"
+                        className=" px-1"
+
+                        onClick={() => setShowPassword(!showPassword)}
+                    >
+                        {showPassword ? <EyeOff size={20}  className="text-[#919090]"/> : <Eye size={20}className="text-[#666666]" />}
+                    </button>
                 </div>
             );
 
