@@ -63,12 +63,15 @@ const LoginPage = () => {
             setLoading(false);
         }
     };
-
     return (
-        <main className="flex flex-col items-center justify-center h-screen">
+        <main className="flex flex-col items-center justify-center w-[40vw] h-[60vh] p-6 ">
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 w-full max-w-md">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 w-full  ">
+                    <div>
 
+                    </div>
+
+                    
                     <CustomFormField
                         fieldType={FormFieldType.INPUT}
                         control={form.control}
@@ -96,7 +99,7 @@ const LoginPage = () => {
                     </Button>
                 </form>
             </Form>
-            
+
             <div className="flex flex-col items-center justify-center space-y-2 mt-4 text-slate-500">
                 <h1 className="text-sm">OR</h1>
                 <p>
