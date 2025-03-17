@@ -82,10 +82,10 @@ const RegisterForm = () => {
 
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 flex flex-col" >
 
-                    <Avatar className="w-16 h-16">
+                    {/* <Avatar className="w-16 h-16">
                         <AvatarImage className="w-full h-full" src="https://github.com/shadcn.png" />
                         <AvatarFallback>Pred</AvatarFallback>
-                    </Avatar>
+                    </Avatar> */}
 
                     <CustomFormField
                         fieldType={FormFieldType.INPUT}
