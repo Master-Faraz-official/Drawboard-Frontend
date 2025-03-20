@@ -15,9 +15,6 @@ import { toast } from "sonner"
 import CustomFormField, { FormFieldType } from "../CustomFormField"
 import Link from "next/link"
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-
-
 
 
 const formSchema = z.object({

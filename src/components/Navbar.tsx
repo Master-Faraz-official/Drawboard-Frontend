@@ -1,11 +1,10 @@
 "use client"
-import axios from "axios"
-import { toast } from "sonner"
 import { Button } from "./ui/button"
 import { useRouter } from "next/navigation"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Image from "next/image"
+import LogoutBtn from "./LogoutBtn"
 
 
 const navItems = [
@@ -21,6 +20,8 @@ interface NavbarProps {
 
 const Navbar = ({ className }: NavbarProps) => {
     const router = useRouter()
+
+
     return (
         <header className={`shadow-2xl bg-cyan-300 py-8 flex items-center flex-col justify-between space-y-16 ${className} backdrop-blur-lg bg-opacity-30 border border-white/20 shadow-xl`}>
             {/* <header className={`shadow-2xl bg-cyan-300 py-8 flex items-center flex-col justify-between space-y-16 ${className}`}> */}
@@ -48,26 +49,7 @@ const Navbar = ({ className }: NavbarProps) => {
                 ))}
             </nav>
 
-            <Button className="bg-red-300 " variant="ghost" onClick={async () => {
-                try {
-                    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/users/logout`, {}, { withCredentials: true });
-
-                    if (response.status !== 200) {
-                        toast.error("Internal Server Error");
-                    }
-
-                    toast.success("Logged out successfully");
-
-
-                    await new Promise(resolve => setTimeout(resolve, 800)); // Delay before navigation
-                    router.replace("/");
-                } catch (error: any) {
-                    toast.error(`Logout Failed: ${error?.message || "An unexpected error occurred while logging out"}`);
-                }
-
-            }} >
-                <Image src="/images/icons/logout.svg" alt="Logout" width={24} height={24} />
-            </Button>
+            <LogoutBtn />
 
         </header>
     )
