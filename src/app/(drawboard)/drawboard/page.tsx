@@ -6,12 +6,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
 import CustomFormField, { FormFieldType } from "@/components/CustomFormField";
+import axios from "axios";
+import { toast } from "sonner";
+import { InteractiveHoverButton } from "@/components/magicui/interactive-hover-button";
 
 const formSchema = z.object({
-  prompt: z.string().min(1, "Prompt is required"),
+  context: z.string(),
 });
 
 const Page = () => {
@@ -20,29 +22,30 @@ const Page = () => {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: { prompt: "" },
+    defaultValues: { context: "" },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (!canvasRef.current) return;
 
-    const imageUrl = await canvasRef.current.getImage();
-    console.log("Submitting:", { prompt: values.prompt, imageUrl });
-    console.log(values)
-    console.log(values.prompt)
-    console.log(imageUrl)
+    const imagePath = await canvasRef.current.getImage();
+    console.log(values.context)
 
-    // const response = await fetch("/api/submit", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({ prompt: values.prompt, imageUrl }),
-    // });
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/analyze`, {
+      imagePath: imagePath,
+      context: values.context
+    }, { withCredentials: true })
 
-    // if (response.ok) {
-    //   console.log("Successfully submitted!");
-    // } else {
-    //   console.error("Submission failed!");
-    // }
+    if (response.status === 200) {
+      toast.success("Analyzed Successfully")
+    }
+    else {
+      toast.error("Failed to analyze")
+    }
+
+    console.log(response.data.data)
+    console.log(response.data.data.result)
+
 
     setResult("This is the output of the command")
   }
@@ -61,15 +64,16 @@ const Page = () => {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 flex flex-col">
               <CustomFormField
                 control={form.control}
-                name="prompt"
+                name="context"
                 label="Prompt Context"
                 placeholder="Please provide the context here ( optional )"
                 fieldType={FormFieldType.TEXTAREA}
               />
 
-              <Button type="submit" className=" text-white">
+              {/* <Button  className=" text-white">
                 Find the response
-              </Button>
+              </Button> */}
+              <InteractiveHoverButton type="submit">Find the Response</InteractiveHoverButton>
             </form>
           </Form>
         </div>
