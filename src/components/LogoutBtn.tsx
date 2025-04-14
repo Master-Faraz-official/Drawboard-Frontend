@@ -27,7 +27,7 @@ const LogoutBtn = () => {
         }} >
             <div className="flex space-x-1">
                 <Image src="/images/icons/logout.svg" alt="Logout" width={24} height={24} />
-                <span className="mt-1">Logout</span>
+                {/* <span className="mt-1">Logout</span> */}
             </div>
         </Button>
     )

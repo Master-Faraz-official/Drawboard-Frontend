@@ -58,6 +58,7 @@ const Page = () => {
       </div>
 
       {/* Form to submit the canvas and the prompt */}
+      
       <div className="w-full h-[30vh] p-4 flex flex-1">
         <div className="bg-red-300 w-1/2 p-4">
           <Form {...form} >
@@ -79,15 +80,20 @@ const Page = () => {
         </div>
 
         {/* Output or Result Area */}
-        <div className="bg-green-300 w-1/2 p-4">
+        {/* <div className="bg-green-300 w-1/2 p-4">
           <h1>Output</h1>
           <div className="bg-slate-400 w-full h-[20vh] p-4">
             {result}
           </div>
-        </div>
+        </div> */}
 
 
       </div>
+
+
+
+
+
     </div>
   );
 };
