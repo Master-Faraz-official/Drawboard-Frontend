@@ -11,8 +11,10 @@ import {
   type ReactSketchCanvasRef,
 } from "react-sketch-canvas";
 import { Button } from "@/components/ui/button";
-import { Eraser, Pen, Redo, RotateCcw, Undo } from "lucide-react";
+import { Dot, Eraser, Pen, Play, Redo, RotateCcw, Undo } from "lucide-react";
 import ToolButton from "./ToolButton";
+import { Slider } from "@/components/ui/slider"
+
 
 const CanvasComponent = forwardRef((_, ref) => {
   const colorInputRef = useRef<HTMLInputElement>(null);
@@ -22,15 +24,18 @@ const CanvasComponent = forwardRef((_, ref) => {
 
   const [penWidth, setPenWidth] = useState(5);
   const [eraserWidth, setEraserWidth] = useState(10);
+  // const [strokeSize, setStrokeSize] = useState("")
 
+  // For eraser and pen size change
 
-  const handlePenWidthChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setPenWidth(+event.target.value);
-  };
-
-  const handleEraserWidthChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setEraserWidth(+event.target.value);
-  };
+  const handleStrokeChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (eraseMode) {
+      setEraserWidth(+event.target.value);
+    }
+    else {
+      setPenWidth(+event.target.value);
+    }
+  }
 
   const handleStrokeColorChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newColor = event.target.value;
@@ -68,8 +73,6 @@ const CanvasComponent = forwardRef((_, ref) => {
     },
   }));
 
-  // Reusable tool button
-  
 
   return (
     <div className="flex h-screen w-full gap-4 relative bg-primary">
@@ -79,10 +82,13 @@ const CanvasComponent = forwardRef((_, ref) => {
         strokeColor={strokeColor}
         canvasColor="transparent"
         className="!rounded-2xl shadow-lg !border-primary z-10"
+        strokeWidth={penWidth}
+        eraserWidth={eraserWidth}
       />
 
       {/* Brush sidebar */}
-      <aside className="w-12 sm:w-16 lg:w-[3vw] bg-icon rounded-3xl h-[70vh] absolute z-20 right-2 top-[15vh] flex flex-col items-center overflow-y-auto py-6 gap-6 divide-y divide-cyan-400">
+      {/* bg-[#363738]  */}
+      <aside className="w-12 sm:w-16 lg:w-[3vw] rounded-3xl bg-secondary h-[80vh] absolute z-20 right-2 top-[10vh] flex flex-col items-center overflow-y-auto py-6 gap-6 divide-y divide-cyan-400">
         <Button
           size="icon"
           className="mb-4"
@@ -115,62 +121,30 @@ const CanvasComponent = forwardRef((_, ref) => {
           />
         </section>
 
+        <section className="flex flex-col items-center gap-2 w-[2vw] pt-2">
 
+          <Dot className="w-[30px] rounded-full h-[30px]" size={16} strokeWidth={eraseMode ? eraserWidth : penWidth} color={eraseMode ? "#ffffff" : strokeColor} />
 
-        <div className="flex flex-col items-center gap-2">
-          <label className="text-sm text-white">
-            {eraseMode ? "Eraser Width" : "Brush Width"}
-          </label>
-
-
-          {eraseMode ? (
-            <input
-              // disabled={eraseMode}
-              type="range"
-              className="form-range"
-              min="1"
-              max="50"
-              step="1"
-              id="strokeWidth"
-              value={penWidth}
-              onChange={handlePenWidthChange}
-            />) :
-            (
-              <input
-                // disabled={!eraseMode}
-                type="range"
-                className="form-range"
-                min="1"
-                max="50"
-                step="1"
-                id="eraserWidth"
-                value={eraserWidth}
-                onChange={handleEraserWidthChange}
-              />
-            )
-          }
-
-          {/* <input
-            type="range"
-            min="1"
-            max="50"
-            step="1"
-            value={eraseMode ? eraserWidth : penWidth}
-            onChange={(e) => {
-              const newSize = +e.target.value;
+          <Slider
+            value={[eraseMode ? eraserWidth : penWidth]}
+            min={1}
+            max={20}
+            step={1}
+            onValueChange={(value) => {
               if (eraseMode) {
-                setEraserWidth(newSize);
+                setEraserWidth(value[0]);
               } else {
-                setPenWidth(newSize);
+                setPenWidth(value[0]);
               }
             }}
-          /> */}
-          <span className="text-white text-xs">
+            className="w-[2vw] mt-1"
+          />
+
+
+          <span className="text-white text-xs pt-1">
             {eraseMode ? eraserWidth : penWidth}px
           </span>
-        </div>
-
-
+        </section>
 
         <section className="flex flex-col gap-3 pt-6">
           <ToolButton
@@ -185,6 +159,11 @@ const CanvasComponent = forwardRef((_, ref) => {
           />
           <ToolButton
             icon={<RotateCcw size={16} />}
+            onClick={handleClearClick}
+            label="Clear Canvas"
+          />
+          <ToolButton
+            icon={<Play size={16} />}
             onClick={handleClearClick}
             label="Clear Canvas"
           />

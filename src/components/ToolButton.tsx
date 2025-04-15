@@ -14,10 +14,11 @@ const ToolButton = ({
     <Button
       size="icon"
       type="button"
-      variant="outline"
+      variant="ghost"
       onClick={onClick}
       disabled={disabled}
       aria-label={label}
+      className="bg-icon hover:bg-slate-300 rounded-3xl"
     >
       {icon}
     </Button>

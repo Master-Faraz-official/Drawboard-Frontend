@@ -26,7 +26,7 @@ export default {
 					foreground: "#FFFFFF", // you can adjust if needed
 				},
 				secondary: {
-					DEFAULT: "#252734",
+					DEFAULT: "#2a2b38",
 					foreground: "#FFFFFF",
 				},
 				icon: "#596575",
