@@ -5,7 +5,6 @@ import CanvasComponent from "@/components/CanvasComponent";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import CustomFormField, { FormFieldType } from "@/components/CustomFormField";
 import axios from "axios";
@@ -18,7 +17,6 @@ const formSchema = z.object({
 
 const Page = () => {
   const canvasRef = useRef<any>(null);
-  const [result, setResult] = useState("")
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -29,7 +27,7 @@ const Page = () => {
     if (!canvasRef.current) return;
 
     const imagePath = await canvasRef.current.getImage();
-    console.log(values.context)
+    // console.log(imagePath)
 
     const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/analyze`, {
       imagePath: imagePath,
@@ -46,8 +44,6 @@ const Page = () => {
     console.log(response.data.data)
     console.log(response.data.data.result)
 
-
-    setResult("This is the output of the command")
   }
 
   return (
@@ -71,10 +67,7 @@ const Page = () => {
                 fieldType={FormFieldType.TEXTAREA}
               />
 
-              {/* <Button  className=" text-white">
-                Find the response
-              </Button> */}
-              <InteractiveHoverButton type="submit">Find the Response</InteractiveHoverButton>
+              <InteractiveHoverButton type="submit" className="w-[2vw]"> h</InteractiveHoverButton>
             </form>
           </Form>
         </div>
