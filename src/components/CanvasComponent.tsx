@@ -9,6 +9,7 @@ import { type ReactSketchCanvasRef } from "react-sketch-canvas";
 
 import CanvasArea from "./canvas/CanvasArea";
 import CanvasActionPanel from "./canvas/CanvasActionPanel";
+import CanvasDock from "./canvas/CanvasDock";
 
 
 const CanvasComponent = forwardRef((_, ref) => {
@@ -25,7 +26,7 @@ const CanvasComponent = forwardRef((_, ref) => {
     async getImage() {
       return await canvasRef.current?.exportImage("png");
     },
-    
+
   }));
 
 
@@ -45,6 +46,7 @@ const CanvasComponent = forwardRef((_, ref) => {
         setStrokeColor={setStrokeColor}
         strokeColor={strokeColor} />
 
+      <CanvasDock />
 
     </div>
   );

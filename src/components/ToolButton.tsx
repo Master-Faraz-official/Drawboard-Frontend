@@ -18,7 +18,7 @@ const ToolButton = ({
       onClick={onClick}
       disabled={disabled}
       aria-label={label}
-      className="bg-icon hover:bg-slate-300 rounded-3xl"
+      className="hover:bg-icon hover:text-black rounded-3xl disabled:bg-white disabled:text-black"
     >
       {icon}
     </Button>

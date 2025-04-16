@@ -1,90 +1,68 @@
 "use client";
 
-import { useRef, useState } from "react";
-import CanvasComponent from "@/components/CanvasComponent";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import {
+  useRef,
+  useState,
+} from "react";
+import { type ReactSketchCanvasRef } from "react-sketch-canvas";
+import CanvasArea from "@/components/canvas/CanvasArea";
+import CanvasActionPanel from "@/components/canvas/CanvasActionPanel";
+import CanvasDock from "@/components/canvas/CanvasDock";
+
 import { z } from "zod";
-import { Form } from "@/components/ui/form";
-import CustomFormField, { FormFieldType } from "@/components/CustomFormField";
-import axios from "axios";
-import { toast } from "sonner";
-import { InteractiveHoverButton } from "@/components/magicui/interactive-hover-button";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const formSchema = z.object({
-  context: z.string(),
+  prompt: z.string(),
 });
 
 const Page = () => {
-  const canvasRef = useRef<any>(null);
+  const canvasRef = useRef<ReactSketchCanvasRef>(null);
+
+  const [strokeColor, setStrokeColor] = useState("#12ded7");
+  const [eraseMode, setEraseMode] = useState(false);
+  const [penWidth, setPenWidth] = useState(5);
+  const [eraserWidth, setEraserWidth] = useState(10);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: { context: "" },
+    defaultValues: { prompt: "" },
   });
+  
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (!canvasRef.current) return;
-
-    const imagePath = await canvasRef.current.getImage();
-    // console.log(imagePath)
-
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/analyze`, {
-      imagePath: imagePath,
-      context: values.context
-    }, { withCredentials: true })
-
-    if (response.status === 200) {
-      toast.success("Analyzed Successfully")
-    }
-    else {
-      toast.error("Failed to analyze")
-    }
-
-    console.log(response.data.data)
-    console.log(response.data.data.result)
-
-  }
+  const handleSubmit = async (values: z.infer<typeof formSchema>) => {
+    const image = await canvasRef.current?.exportImage("png");
+    console.log("Prompt:", values.prompt);
+    console.log("Image:", image);
+    // You can send both `prompt` and `image` to an API here
+  };
 
   return (
     <div className="w-full h-screen flex flex-col">
-      {/* Canvas to draw  */}
-      <div className="w-full">
-        <CanvasComponent ref={canvasRef} />
+      <div className="flex flex-1 w-full gap-4 relative bg-primary">
+        <CanvasArea
+          canvasRef={canvasRef}
+          eraserWidth={eraserWidth}
+          penWidth={penWidth}
+          strokeColor={strokeColor}
+        />
+
+        <CanvasActionPanel
+          canvasRef={canvasRef}
+          eraseMode={eraseMode}
+          eraserWidth={eraserWidth}
+          penWidth={penWidth}
+          setEraseMode={setEraseMode}
+          setEraserWidth={setEraserWidth}
+          setPenWidth={setPenWidth}
+          setStrokeColor={setStrokeColor}
+          strokeColor={strokeColor}
+          
+        />
+
+        <CanvasDock form={form} />
       </div>
-
-      {/* Form to submit the canvas and the prompt */}
-      
-      <div className="w-full h-[30vh] p-4 flex flex-1">
-        <div className="bg-red-300 w-1/2 p-4">
-          <Form {...form} >
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 flex flex-col">
-              <CustomFormField
-                control={form.control}
-                name="context"
-                label="Prompt Context"
-                placeholder="Please provide the context here ( optional )"
-                fieldType={FormFieldType.TEXTAREA}
-              />
-
-              <InteractiveHoverButton type="submit" className="w-[2vw]"> h</InteractiveHoverButton>
-            </form>
-          </Form>
-        </div>
-
-        {/* Output or Result Area */}
-        {/* <div className="bg-green-300 w-1/2 p-4">
-          <h1>Output</h1>
-          <div className="bg-slate-400 w-full h-[20vh] p-4">
-            {result}
-          </div>
-        </div> */}
-
-
-      </div>
-
-
-
 
 
     </div>

@@ -78,10 +78,11 @@ const CanvasActionPanel = ({
 
 
     return (
-        <aside className="w-12 sm:w-16 lg:w-[3vw] rounded-3xl bg-secondary h-[80vh] absolute z-20 right-2 top-[10vh] flex flex-col items-center overflow-y-auto py-6 gap-6 divide-y divide-cyan-400">
+        <aside className="w-12 sm:w-16 lg:w-[3vw] h-[72vh] rounded-3xl bg-secondary  absolute z-20 right-2 top-[10vh] flex flex-col items-center overflow-y-auto py-6 gap-6 divide-y divide-slate-400 text-slate-300">
+            
             <Button
                 size="icon"
-                className="mb-4"
+                className="pt-2"
                 type="button"
                 aria-label="Pick stroke color"
                 onClick={() => colorInputRef.current?.click()}
@@ -102,6 +103,7 @@ const CanvasActionPanel = ({
                     onClick={handlePenClick}
                     disabled={!eraseMode}
                     label="Pen Tool"
+                    
                 />
                 <ToolButton
                     icon={<Eraser size={16} />}
