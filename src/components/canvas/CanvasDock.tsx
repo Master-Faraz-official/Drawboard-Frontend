@@ -1,24 +1,26 @@
 
-import {  Sparkles, Lightbulb } from "lucide-react";
+import { Sparkles, Lightbulb } from "lucide-react";
 import { Dock, DockIcon } from '@/components/magicui/dock';
 import IconPopover from "./IconPopover";
 import { UseFormReturn } from "react-hook-form";
+import { ReactSketchCanvasRef } from "react-sketch-canvas";
 
-interface propType{
-    form : UseFormReturn<{ prompt: string; }>
+interface propType {
+    form: UseFormReturn<{ prompt: string; }>
+    canvasRef: React.RefObject<ReactSketchCanvasRef | null>,
 }
 
 const iconstyle = " hover:bg-icon hover:text-black"
 
-const CanvasDock = ({form}:propType) => {
+const CanvasDock = ({ form,canvasRef }: propType) => {
 
     return (
         <Dock direction="bottom" iconMagnification={60} className='border-none z-20 bg-secondary absolute bottom-5 right-[48%]  text-slate-400'>
             <DockIcon className={iconstyle}>
-                <IconPopover icon={Sparkles} form= {form} />
+                <IconPopover icon={Sparkles} form={form} canvasRef= {canvasRef} type="prompt"/>
             </DockIcon>
 
-         
+
             <DockIcon className={iconstyle}>
                 {/* <Lightbulb /> */}
                 <Lightbulb className=" text-yellow-400 animate-pulse" style={{ filter: "drop-shadow(0 0 6px #facc15)" }} />

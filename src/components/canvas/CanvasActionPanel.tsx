@@ -1,9 +1,11 @@
-import React, { useCallback, useRef, useState, type ChangeEvent, } from 'react'
+import React, { useCallback, useRef, type ChangeEvent, } from 'react'
 import { Button } from '../ui/button';
 import ToolButton from '../ToolButton';
 import { ReactSketchCanvasRef } from 'react-sketch-canvas';
 import { Dot, Eraser, Pen, Play, Redo, RotateCcw, Undo } from "lucide-react";
 import { Slider } from "@/components/ui/slider"
+import { UseFormReturn } from 'react-hook-form';
+import handleSubmitForm from '@/utils/handleSubmitForm';
 
 
 
@@ -17,6 +19,7 @@ type canvasActionPanelProps = {
     eraserWidth: number;
     setPenWidth: (width: number) => void;
     setEraserWidth: (width: number) => void;
+    form: UseFormReturn<{ prompt: string; }>
 
 }
 
@@ -29,14 +32,13 @@ const CanvasActionPanel = ({
     penWidth,
     eraserWidth,
     setPenWidth,
-    setEraserWidth
-
+    setEraserWidth,
+    form
 
 }: canvasActionPanelProps) => {
 
-    // States 
     const colorInputRef = useRef<HTMLInputElement>(null);
-    
+
 
     // Functions
 
@@ -46,7 +48,6 @@ const CanvasActionPanel = ({
         setEraseMode(false);
         canvasRef.current?.eraseMode(false);
     };
-
 
     const handleEraserClick = useCallback(() => {
         setEraseMode(true);
@@ -68,18 +69,20 @@ const CanvasActionPanel = ({
 
     const handleClearClick = useCallback(() => {
         canvasRef.current?.clearCanvas();
+        form.resetField("prompt")
     }, []);
 
 
-    const handleSubmit = useCallback(async () => {
-        const imagePath = await canvasRef.current?.exportImage("png");
-        console.log(imagePath)
-    }, []);
+    const handleSubmit = async () => {
+        const prompt = form.getValues("prompt")
+        handleSubmitForm({ prompt, canvasRef })
+
+    };
 
 
     return (
-        <aside className="w-12 sm:w-16 lg:w-[3vw] h-[72vh] rounded-3xl bg-secondary  absolute z-20 right-2 top-[10vh] flex flex-col items-center overflow-y-auto py-6 gap-6 divide-y divide-slate-400 text-slate-300">
-            
+        <aside className="w-12 sm:w-16 lg:w-[3vw] h-[72vh] rounded-3xl bg-secondary  absolute z-20 right-2 top-[15vh] flex flex-col items-center overflow-y-auto py-6 gap-6 divide-y divide-slate-400 text-slate-300">
+
             <Button
                 size="icon"
                 className="pt-2"
@@ -103,7 +106,7 @@ const CanvasActionPanel = ({
                     onClick={handlePenClick}
                     disabled={!eraseMode}
                     label="Pen Tool"
-                    
+
                 />
                 <ToolButton
                     icon={<Eraser size={16} />}

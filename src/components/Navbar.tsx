@@ -3,9 +3,6 @@ import { Button } from "./ui/button"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import LogoutBtn from "./LogoutBtn"
-// #1C1C24 -> Primary
-// #252734 -> Secontary
-// #596575 -> Icons
 
 
 const navItems = [
@@ -26,24 +23,21 @@ const Navbar = ({ className }: NavbarProps) => {
     return (
         <header className={`shadow-2xl bg-secondary py-8 flex items-center flex-col justify-between space-y-16 ${className} backdrop-blur-lg shadow-xl`}>
 
-            <div>
-                <Image src="/images/icons/logo.png"  alt="Logo" width={45} height={45} />
-            </div>
+            <Image src="/images/icons/logo.png" alt="Logo" width={65} height={65} className="" />
 
 
-            <nav className="flex flex-col space-y-10 text-sm ">
+            <nav className="flex flex-col space-y-10 ">
                 {navItems.map((obj) => (
-                    <div key={obj.name}>
-                        <Button className="hover:bg-slate-400" variant="ghost" onClick={() => { router.push(obj.link) }}>
-                            <Image src={obj.icon} alt={obj.name} width={24} height={24} />
-                        </Button>
-                    </div>
+                    <Button key={obj.name} className="  hover:bg-icon border-none" variant="ghost" >
+                        <Image src={obj.icon} alt={obj.name} width={30} height={30} className="rounded-3xl  hover:bg-icon " onClick={() => { router.push(obj.link) }} />
+                    </Button>
                 ))}
             </nav>
 
-            <LogoutBtn />
-           
-            <Image src="/images/icons/settings.svg" className="hover:text-red-500" alt="Logo" width={24} height={24} />
+            <div className="flex flex-col items-center justify-center space-y-6 text-slate-300">
+                <LogoutBtn />
+
+            </div>
 
         </header>
     )

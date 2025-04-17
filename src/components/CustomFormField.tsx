@@ -103,7 +103,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
                     <Textarea
                         placeholder={props.placeholder}
                         {...field}
-                        className=" placeholder:text-dark-600 border-dark-500 focus-visible:ring-0 focus-visible:ring-offset-0 "
+                        className=" placeholder:text-dark-600 border-dark-500 focus-visible:ring-0 focus-visible:ring-offset-0 h-[100px] text-white"
                         disabled={props.disabled}
                     />
                 </FormControl>
@@ -125,7 +125,7 @@ const CustomFormField = (props: CustomProps) => {
             render={({ field }) => (
                 <FormItem className={`${className}`}>
                     {label && (
-                        <FormLabel className="text-[14px] leading-[18px] font-medium ">{label}</FormLabel>
+                        <FormLabel className="text-[16px] leading-[18px] font-bold text-white ">{label}</FormLabel>
                     )}
                     <RenderInput field={field} props={props} />
 

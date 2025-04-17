@@ -13,7 +13,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const formSchema = z.object({
+export const formSchema = z.object({
   prompt: z.string(),
 });
 
@@ -30,13 +30,6 @@ const Page = () => {
     defaultValues: { prompt: "" },
   });
   
-
-  const handleSubmit = async (values: z.infer<typeof formSchema>) => {
-    const image = await canvasRef.current?.exportImage("png");
-    console.log("Prompt:", values.prompt);
-    console.log("Image:", image);
-    // You can send both `prompt` and `image` to an API here
-  };
 
   return (
     <div className="w-full h-screen flex flex-col">
@@ -58,10 +51,11 @@ const Page = () => {
           setPenWidth={setPenWidth}
           setStrokeColor={setStrokeColor}
           strokeColor={strokeColor}
+          form = {form}
           
         />
 
-        <CanvasDock form={form} />
+        <CanvasDock form={form} canvasRef={canvasRef} />
       </div>
 
 
