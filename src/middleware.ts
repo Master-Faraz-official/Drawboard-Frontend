@@ -5,7 +5,7 @@ export function middleware(req: NextRequest) {
     const token = req.cookies.get("accessToken")?.value; // Get access token from cookies
 
     // If user is NOT logged in and trying to access `/` or `/drawboard`, redirect to `/login`
-    if (!token && (req.nextUrl.pathname === "/" || req.nextUrl.pathname.startsWith("/drawboard"))) {
+    if (!token && (req.nextUrl.pathname === "/" )) {
         return NextResponse.redirect(new URL("/login", req.url));
     }
 

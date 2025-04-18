@@ -21,6 +21,9 @@ type canvasActionPanelProps = {
     setEraserWidth: (width: number) => void;
     form: UseFormReturn<{ prompt: string; }>
 
+    // result: object;
+    setResult: (res: object) => void
+
 }
 
 const CanvasActionPanel = ({
@@ -33,7 +36,8 @@ const CanvasActionPanel = ({
     eraserWidth,
     setPenWidth,
     setEraserWidth,
-    form
+    form,
+    setResult
 
 }: canvasActionPanelProps) => {
 
@@ -75,7 +79,7 @@ const CanvasActionPanel = ({
 
     const handleSubmit = async () => {
         const prompt = form.getValues("prompt")
-        handleSubmitForm({ prompt, canvasRef })
+        handleSubmitForm({ prompt, canvasRef ,setResult})
 
     };
 

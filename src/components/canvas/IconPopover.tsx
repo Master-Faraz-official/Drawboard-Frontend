@@ -12,10 +12,13 @@ interface IconPopoverProps {
     icon: LucideIcon;
     form?: UseFormReturn<{ prompt: string; }>
     canvasRef: React.RefObject<ReactSketchCanvasRef | null>,
-    type: "prompt" | "result"
+    type: "prompt" | "result",
+    setResult: (res: object) => void
+    result: object;
+
 }
 
-const IconPopover = ({ icon, form, type, canvasRef }: IconPopoverProps) => {
+const IconPopover = ({ icon, form, type, canvasRef, setResult }: IconPopoverProps) => {
     const Icon = icon;
 
     return (

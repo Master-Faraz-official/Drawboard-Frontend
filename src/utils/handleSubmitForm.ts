@@ -6,11 +6,12 @@ interface propsType {
     // imagePath: string | undefined,
     prompt: string,
     canvasRef: React.RefObject<ReactSketchCanvasRef | null>,
+    setResult: (res: object) => void
 
 }
 
 
-const handleSubmitForm = async ({ prompt, canvasRef }: propsType) => {
+const handleSubmitForm = async ({ prompt, canvasRef, setResult }: propsType) => {
 
     if (!canvasRef.current) return;
     const imagePath = await canvasRef.current?.exportImage("png");
@@ -27,7 +28,8 @@ const handleSubmitForm = async ({ prompt, canvasRef }: propsType) => {
         toast.error("Failed to analyze")
     }
 
-    console.log(response.data.data.result)
+    setResult(response.data.data.result)
+    // console.log(response.data.data.result)
     console.log("Form created successfully")
 
     // console.log(imagePath)

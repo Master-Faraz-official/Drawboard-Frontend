@@ -2,7 +2,7 @@ import React from "react";
 import { ReactSketchCanvas, type ReactSketchCanvasRef } from "react-sketch-canvas";
 
 type canvasAreaProp = {
-    canvasRef: React.RefObject<ReactSketchCanvasRef  | null>,
+    canvasRef: React.RefObject<ReactSketchCanvasRef | null>,
     strokeColor: string,
     penWidth: number,
     eraserWidth: number
