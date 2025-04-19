@@ -17,6 +17,12 @@ export const formSchema = z.object({
   prompt: z.string(),
 });
 
+export type ResultType = {
+  expr: string;
+  result: number;
+  assign: boolean;
+};
+
 const Page = () => {
   const canvasRef = useRef<ReactSketchCanvasRef>(null);
 
@@ -24,7 +30,9 @@ const Page = () => {
   const [eraseMode, setEraseMode] = useState(false);
   const [penWidth, setPenWidth] = useState(5);
   const [eraserWidth, setEraserWidth] = useState(10);
-  const [result, setResult] = useState({})
+
+  const [result, setResult] = useState<ResultType[]>([]);
+
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -59,11 +67,11 @@ const Page = () => {
 
         />
 
-        <CanvasDock 
-        form={form} 
-        canvasRef={canvasRef} 
-        result={result}
-        setResult={setResult}
+        <CanvasDock
+          form={form}
+          canvasRef={canvasRef}
+          result={result}
+          setResult={setResult}
         />
       </div>
 

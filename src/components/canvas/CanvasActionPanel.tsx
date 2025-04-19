@@ -6,6 +6,7 @@ import { Dot, Eraser, Pen, Play, Redo, RotateCcw, Undo } from "lucide-react";
 import { Slider } from "@/components/ui/slider"
 import { UseFormReturn } from 'react-hook-form';
 import handleSubmitForm from '@/utils/handleSubmitForm';
+import { ResultType } from '@/app/page';
 
 
 
@@ -21,8 +22,8 @@ type canvasActionPanelProps = {
     setEraserWidth: (width: number) => void;
     form: UseFormReturn<{ prompt: string; }>
 
-    // result: object;
-    setResult: (res: object) => void
+    // result: ResultType[];
+    setResult: React.Dispatch<React.SetStateAction<ResultType[]>>
 
 }
 

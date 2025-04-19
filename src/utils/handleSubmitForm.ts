@@ -1,3 +1,4 @@
+import { ResultType } from "@/app/page";
 import axios from "axios";
 import { ReactSketchCanvasRef } from "react-sketch-canvas"
 import { toast } from "sonner";
@@ -6,7 +7,7 @@ interface propsType {
     // imagePath: string | undefined,
     prompt: string,
     canvasRef: React.RefObject<ReactSketchCanvasRef | null>,
-    setResult: (res: object) => void
+     setResult: React.Dispatch<React.SetStateAction<ResultType[]>>
 
 }
 
@@ -28,8 +29,8 @@ const handleSubmitForm = async ({ prompt, canvasRef, setResult }: propsType) => 
         toast.error("Failed to analyze")
     }
 
-    setResult(response.data.data.result)
     // console.log(response.data.data.result)
+    setResult(response.data.data.result)
     console.log("Form created successfully")
 
     // console.log(imagePath)
@@ -39,3 +40,5 @@ const handleSubmitForm = async ({ prompt, canvasRef, setResult }: propsType) => 
 
 
 export default handleSubmitForm
+
+

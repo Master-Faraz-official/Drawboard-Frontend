@@ -6,17 +6,19 @@ import { InteractiveHoverButton } from "@/components/magicui/interactive-hover-b
 import { ReactSketchCanvasRef } from "react-sketch-canvas";
 import { formSchema } from "@/app/(drawboard)/drawboard/page";
 import handleSubmitForm from "@/utils/handleSubmitForm";
+import { ResultType } from "@/app/page";
 
 interface propType {
     form: UseFormReturn<{ prompt: string; }>,
     canvasRef: React.RefObject<ReactSketchCanvasRef | null>,
+    setResult: React.Dispatch<React.SetStateAction<ResultType[]>>
 }
 
-const PromptForm = ({ form,canvasRef }: propType) => {
+const PromptForm = ({ form, canvasRef, setResult }: propType) => {
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         const prompt = values.prompt
-       handleSubmitForm({prompt,canvasRef})
+        handleSubmitForm({ prompt, canvasRef, setResult })
 
     }
 

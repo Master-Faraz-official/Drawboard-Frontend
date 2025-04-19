@@ -7,18 +7,20 @@ import { LucideIcon } from "lucide-react";
 import PromptForm from "./PromptForm";
 import { UseFormReturn } from "react-hook-form";
 import { ReactSketchCanvasRef } from "react-sketch-canvas";
+import { ResultType } from "@/app/page";
+import ResultForm from "./ResultForm";
 
 interface IconPopoverProps {
     icon: LucideIcon;
     form?: UseFormReturn<{ prompt: string; }>
     canvasRef: React.RefObject<ReactSketchCanvasRef | null>,
     type: "prompt" | "result",
-    setResult: (res: object) => void
-    result: object;
+    result: ResultType[];
+    setResult: React.Dispatch<React.SetStateAction<ResultType[]>>
 
 }
 
-const IconPopover = ({ icon, form, type, canvasRef, setResult }: IconPopoverProps) => {
+const IconPopover = ({ icon, form, type, canvasRef, result, setResult }: IconPopoverProps) => {
     const Icon = icon;
 
     return (
@@ -28,10 +30,10 @@ const IconPopover = ({ icon, form, type, canvasRef, setResult }: IconPopoverProp
             <PopoverContent className="flex flex-col items-center justify-center w-[400px] rounded-3xl mb-4 bg-icon border-none" >
 
                 <section className="w-full">
-                    {type === "prompt" ? (<PromptForm form={form!} canvasRef={canvasRef} />) : (
-                        type === "result" ?
-                            ("")
-                            : (""))}
+                    {type === "prompt" ? (
+                        <PromptForm form={form!} canvasRef={canvasRef} setResult={setResult} />) : (
+                         <ResultForm result={result} />
+                    )}
                 </section>
 
             </PopoverContent>
