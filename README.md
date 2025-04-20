@@ -1,3 +1,30 @@
+# Drawboard Frontend
+
+The **Drawboard Frontend** is a React-based application designed to provide an interactive canvas for users to draw, analyze, and display results dynamically. This project is part of a larger system that integrates with a backend API for image analysis and result generation.
+
+---
+
+## 🚀 Features
+
+- **Interactive Canvas**: Users can draw on a canvas and export their drawings.
+- **Dynamic Result Display**: Results from the backend are displayed in real-time.
+- **Responsive Design**: Fully responsive UI for various screen sizes.
+- **API Integration**: Communicates with a backend API for image analysis.
+
+---
+
+## 🛠️ Technologies Used
+
+- **React**: Frontend framework for building the UI.
+- **TypeScript**: Strongly typed JavaScript for better code quality.
+- **Tailwind CSS**: Utility-first CSS framework for styling.
+- **Axios**: HTTP client for API requests.
+- **Toastify**: Notifications for success and error messages.
+
+---
+
+## 📂 Project Structure
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
