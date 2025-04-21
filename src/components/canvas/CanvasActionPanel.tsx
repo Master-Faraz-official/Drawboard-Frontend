@@ -25,6 +25,8 @@ type canvasActionPanelProps = {
     // result: ResultType[];
     setResult: React.Dispatch<React.SetStateAction<ResultType[]>>
 
+    setLoading: (vlaue: boolean) => void;
+
 }
 
 const CanvasActionPanel = ({
@@ -38,8 +40,8 @@ const CanvasActionPanel = ({
     setPenWidth,
     setEraserWidth,
     form,
-    setResult
-
+    setResult,
+    setLoading
 }: canvasActionPanelProps) => {
 
     const colorInputRef = useRef<HTMLInputElement>(null);
@@ -79,8 +81,10 @@ const CanvasActionPanel = ({
 
 
     const handleSubmit = async () => {
+        setLoading(true)
         const prompt = form.getValues("prompt")
-        handleSubmitForm({ prompt, canvasRef ,setResult})
+        await handleSubmitForm({ prompt, canvasRef, setResult })
+        setLoading(false)
 
     };
 

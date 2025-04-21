@@ -30,6 +30,7 @@ const handleSubmitForm = async ({ prompt, canvasRef, setResult }: propsType) => 
     }
 
     // console.log(response.data.data.result)
+    console.log(response.data.data.result)
     setResult(response.data.data.result)
     console.log("Form created successfully")
 

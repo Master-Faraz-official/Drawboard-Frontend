@@ -12,13 +12,17 @@ interface propType {
     form: UseFormReturn<{ prompt: string; }>,
     canvasRef: React.RefObject<ReactSketchCanvasRef | null>,
     setResult: React.Dispatch<React.SetStateAction<ResultType[]>>
+    setLoading: (vlaue: boolean) => void;
+
 }
 
-const PromptForm = ({ form, canvasRef, setResult }: propType) => {
+const PromptForm = ({ setLoading, form, canvasRef, setResult }: propType) => {
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
+        setLoading(true)
         const prompt = values.prompt
-        handleSubmitForm({ prompt, canvasRef, setResult })
+        await handleSubmitForm({ prompt, canvasRef, setResult })
+        setLoading(false)
 
     }
 
@@ -30,12 +34,12 @@ const PromptForm = ({ form, canvasRef, setResult }: propType) => {
                         <CustomFormField
                             control={form.control}
                             name="prompt"
-                            label="Drawing Prompt"
-                            placeholder="Please provide the context here ( optional )"
+                            label="Describe Your Drawing (Optional)"
+                            placeholder="Describe your drawing or ask a related question"
                             fieldType={FormFieldType.TEXTAREA}
                         />
 
-                        <InteractiveHoverButton type="submit" className="border-none">submit</InteractiveHoverButton>
+                        <InteractiveHoverButton type="submit" className="border-none">Submit</InteractiveHoverButton>
                     </form>
                 </Form>
             </div>
